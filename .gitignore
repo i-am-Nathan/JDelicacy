@@ -64,7 +64,6 @@ typings/
 *.userprefs
 *.usertasks
 *.user
-*.xml
 *.cache
 *.g.cs
 *.png

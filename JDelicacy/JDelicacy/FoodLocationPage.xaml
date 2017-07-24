@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="JDelicacy.FoodLocationPage"
+             Title="Shared">
+    <ContentPage.Content>
+        <StackLayout VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+            <!--TopStack-->
+            <StackLayout VerticalOptions="Start">
+
+            </StackLayout>
+            <StackLayout VerticalOptions="CenterAndExpand" Margin="15,0,15,0">
+                <ListView x:Name="FoodList" HasUnevenRows="True">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <StackLayout Orientation="Vertical">
+                                    <Label Text="{Binding Title}" TextColor="#000000" Font="Bold" Margin="0,10,0,0"/>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*"/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="1*"/>
+                                            <ColumnDefinition Width="1*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Label Text="{Binding Longitude, StringFormat='Longitude: {0:N}'}" HorizontalTextAlignment="Start" Grid.Row="0" Grid.Column="0"/>
+                                        <Label Text="{Binding Latitude, StringFormat='Latitude: {0:N}'}" HorizontalTextAlignment="Start" Grid.Row="0" Grid.Column="1"/>
+                                    </Grid>
+                                </StackLayout>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackLayout>
+            <StackLayout VerticalOptions="End"  Margin="15,0,15,15">
+                <Button Text="Update Photo Locations" TextColor="White" BackgroundColor="Red" Clicked="UpdateButtonClicked" />
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

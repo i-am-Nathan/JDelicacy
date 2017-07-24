@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:JDelicacy"
+             x:Class="JDelicacy.MainPage"
+             Title="Home">
+
+    <ContentPage.Padding>
+        <OnPlatform x:TypeArguments="Thickness" iOS="0, 20, 0, 0" />
+    </ContentPage.Padding>
+    <ContentPage.Content>
+        <StackLayout VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+            <!--TopStack-->
+            <StackLayout VerticalOptions="Start">
+
+            </StackLayout>
+            <!--CENTER STACK-->
+            <StackLayout VerticalOptions="CenterAndExpand" Margin="15,0,15,0">
+                <Image Source="https://cdn.pixabay.com/photo/2017/01/31/20/34/photo-camera-2027073_960_720.png" x:Name="foodImage" Aspect="AspectFit" Margin="15,0,15,0"/>
+            </StackLayout>
+            <!--END STACK-->
+            <StackLayout VerticalOptions="End" Spacing="0" Margin="15,0,15,15">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label x:Name="foodLabel" 
+                       HorizontalOptions="Start" 
+                       VerticalOptions="Center"
+                       Grid.Row="0"
+                       Grid.Column="0"/>
+                    <Button Text="Share" 
+                        x:Name="shareButton"
+                        IsVisible ="False" 
+                        Clicked="ShareButtonClicked"
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        HorizontalOptions="End"/>
+                </Grid>
+
+                <Button Text="Upload Photo"
+                        Clicked="UploadButtonClicked"/>
+                <Button Text="Take Photo"
+                        Clicked="TakeButtonClicked"/>
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
+
+
+</ContentPage>

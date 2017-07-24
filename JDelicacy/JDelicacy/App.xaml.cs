@@ -13,7 +13,7 @@ namespace JDelicacy
 		{
 			InitializeComponent();
 
-			MainPage = new JDelicacy.FoodLocationPage();
+			MainPage = new Tabs();
 		}
 
 		protected override void OnStart ()

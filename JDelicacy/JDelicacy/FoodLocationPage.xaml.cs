@@ -14,7 +14,7 @@ namespace JDelicacy
 	{
 		public FoodLocationPage ()
 		{
-			InitializeComponent ();
+			InitializeComponent();
 		}
 
         private async void UpdateButtonClicked(object sender, EventArgs e)

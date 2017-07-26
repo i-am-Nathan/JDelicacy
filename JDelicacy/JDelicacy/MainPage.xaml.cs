@@ -29,7 +29,26 @@ namespace JDelicacy
 
         private async void UploadButtonClicked(object sender, EventArgs e)
         {
+            await CrossMedia.Current.Initialize();
 
+            if (!CrossMedia.Current.IsPickPhotoSupported)
+            {
+                await DisplayAlert("Pick Photo Unsupported", ":(Cannot pick photos.", "OK");
+            }
+            var photo = await CrossMedia.Current.PickPhotoAsync();
+
+            if (photo == null)
+            {
+                return;
+            }
+
+            foodLabel.Text = "";
+
+            foodImage.Source = ImageSource.FromStream(() =>
+            {
+                return photo.GetStream();
+            });
+            await MakePredictionRequest(photo);
         }
 
         private async void TakeButtonClicked(object sender, EventArgs e)

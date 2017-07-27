@@ -1,5 +1,6 @@
 ﻿using JDelicacy.Models;
 using Newtonsoft.Json;
+using Plugin.Geolocator;
 using Plugin.Media;
 using Plugin.Media.Abstractions;
 using System;
@@ -17,14 +18,39 @@ namespace JDelicacy
 {
 	public partial class MainPage : ContentPage
 	{
+        FoodLocationModel unsentModel;
+
 		public MainPage()
 		{
 			InitializeComponent();
+            unsentModel = null;
 		}
+
+        private async void addFoodLocationToDB(FoodLocationModel model)
+        {
+            await AzureManager.AzureManagerInstance.PostFoodLocation(model);
+        }
 
         private async void ShareButtonClicked(object sender, EventArgs e)
         {
+            try
+            {
+                if (unsentModel == null)
+                {
+                    await (DisplayAlert("Warning", "Please upload/reupload an image", "OK"));
+                    return;
+                }
 
+                await (DisplayAlert("Uploaded", "Food Location has been uploaded", "OK"));
+                
+                await AzureManager.AzureManagerInstance.PostFoodLocation(unsentModel);
+
+                unsentModel = null;
+
+            } catch(Exception error)
+            {
+                Console.WriteLine("{0} Exception.", error);
+            }
         }
 
         private async void UploadButtonClicked(object sender, EventArgs e)
@@ -117,8 +143,19 @@ namespace JDelicacy
                     {
                         if (prediction.Probability >= 0.8)
                         {
+                            var locator = CrossGeolocator.Current;
+                            locator.DesiredAccuracy = 50;
+
+                            var position = await locator.GetPositionAsync(10000);
+
                             foodLabel.Text = prediction.Tag;
                             shareButton.IsVisible = true;
+                            unsentModel = new FoodLocationModel()
+                            {
+                                Title = prediction.Tag,
+                                Longitude = (float)position.Longitude,
+                                Latitude = (float)position.Latitude
+                            };
                             file.Dispose();
                             return;
                         }

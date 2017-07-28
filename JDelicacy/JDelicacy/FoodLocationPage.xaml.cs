@@ -24,19 +24,11 @@ namespace JDelicacy
 
         private async void UpdateButtonClicked(object sender, EventArgs e)
         {
+
             List<FoodLocationModel> foodLocationInfo = await AzureManager.AzureManagerInstance.GetFoodLocationInfo();
-
-            foreach(FoodLocationModel model in foodLocationInfo)
-            {
-                var position = new Position(model.Latitude, model.Longitude);
-                var possibleAddresses = await geoCoder.GetAddressesForPositionAsync(position);
-                foreach(var address in possibleAddresses)
-                {
-                    model.City = address;
-                }
-
-                FoodList.ItemsSource = foodLocationInfo;
-            }
+            FoodList.ItemsSource = foodLocationInfo;
+                
+            
         }
 
     }

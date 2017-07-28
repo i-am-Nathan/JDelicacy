@@ -115,56 +115,60 @@ namespace JDelicacy
 
         private async Task MakePredictionRequest(MediaFile file)
         {
-            Contract.Ensures(Contract.Result<Task>() != null);
-            var client = new HttpClient();
-
-            client.DefaultRequestHeaders.Add("Prediction-Key", "9b2cd115e674489c892a12aa9b4747f2");
-
-            string url = "https://southcentralus.api.cognitive.microsoft.com/customvision/v1.0/Prediction/9ced7a98-a868-45b5-a7ca-e9112877744a/image?iterationId=decd2fad-4dfe-4c98-a7f3-7b82e1b058e6";
-            HttpResponseMessage response;
-
-            byte[] byteData = GetImageAsByteArray(file);
-
-            using (var content = new ByteArrayContent(byteData))
+            try
             {
+                Contract.Ensures(Contract.Result<Task>() != null);
+                var client = new HttpClient();
 
-                content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
-                response = await client.PostAsync(url, content);
+                client.DefaultRequestHeaders.Add("Prediction-Key", "9b2cd115e674489c892a12aa9b4747f2");
 
-                if (response.IsSuccessStatusCode)
+                string url = "https://southcentralus.api.cognitive.microsoft.com/customvision/v1.0/Prediction/9ced7a98-a868-45b5-a7ca-e9112877744a/image?iterationId=decd2fad-4dfe-4c98-a7f3-7b82e1b058e6";
+                HttpResponseMessage response;
+
+                byte[] byteData = GetImageAsByteArray(file);
+
+                using (var content = new ByteArrayContent(byteData))
                 {
-                    var responseString = await response.Content.ReadAsStringAsync();
 
-                    EvaluationModel responseModel = JsonConvert.DeserializeObject<EvaluationModel>(responseString);
-
-                    List<Prediction> predictions = responseModel.Predictions;
-
-                    foreach (Prediction prediction in predictions)
+                    content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+                    response = await client.PostAsync(url, content);
+                    if (response.IsSuccessStatusCode)
                     {
-                        if (prediction.Probability >= 0.8)
+                        var responseString = await response.Content.ReadAsStringAsync();
+
+                        EvaluationModel responseModel = JsonConvert.DeserializeObject<EvaluationModel>(responseString);
+
+                        List<Prediction> predictions = responseModel.Predictions;
+
+                        foreach (Prediction prediction in predictions)
                         {
-                            var locator = CrossGeolocator.Current;
-                            locator.DesiredAccuracy = 50;
-
-                            var position = await locator.GetPositionAsync(10000);
-
-                            foodLabel.Text = prediction.Tag;
-                            shareButton.IsVisible = true;
-                            unsentModel = new FoodLocationModel()
+                            if (prediction.Probability >= 0.8)
                             {
-                                Title = prediction.Tag,
-                                Longitude = (float)position.Longitude,
-                                Latitude = (float)position.Latitude
-                            };
-                            file.Dispose();
-                            return;
-                        }
-                    }
-                    foodLabel.Text = "What is this? Is this even food?";
-                }
+                                var locator = CrossGeolocator.Current;
+                                locator.DesiredAccuracy = 50;
 
-                //Get rid of file once we have finished using it
-                file.Dispose();
+                                var position = await locator.GetPositionAsync(10000);
+
+                                foodLabel.Text = prediction.Tag;
+                                shareButton.IsVisible = true;
+                                unsentModel = new FoodLocationModel()
+                                {
+                                    Title = prediction.Tag,
+                                    Longitude = (float)position.Longitude,
+                                    Latitude = (float)position.Latitude
+                                };
+                                file.Dispose();
+                                return;
+                            }
+                        }
+                        foodLabel.Text = "What is this? Is this even food?";
+                    }
+                    //Get rid of file once we have finished using it
+                    file.Dispose();
+                }
+            } catch(Exception e)
+            {
+                Console.WriteLine("{0} Exception caught", e);
             }
         }
     }

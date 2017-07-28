@@ -16,7 +16,6 @@
                             <ViewCell>
                                 <StackLayout Orientation="Vertical">
                                     <Label Text="{Binding Title}" TextColor="#000000" Font="Bold" Margin="0,10,0,0"/>
-                                    <Label Text="{Binding City}" TextColor="#000000" Margin="0,10,0,0"/>
                                     <Grid>
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="*"/>
